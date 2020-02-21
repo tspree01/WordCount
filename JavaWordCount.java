@@ -16,7 +16,7 @@ public class JavaWordCount
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String> lines = sc.textFile(args[0]);
 		JavaRDD<String> words = lines.flatMap(l -> Arrays.asList(l.toLowerCase().replaceAll("[_[0-9]]+", "").split("[^\\w]+")).iterator());
-		JavaRDD<String> wordsNoBlanks = words.filter(l -> ! l.isEmpty());
+		JavaRDD<String> wordsNoBlanks = words.filter(l -> !l.isEmpty());
 		JavaPairRDD<String, Integer> wordPairs = wordsNoBlanks.mapToPair(w -> new Tuple2<>(w, 1));
 		JavaPairRDD<String, Integer> wordCounts = wordPairs.reduceByKey((n1, n2) -> n1 + n2);
 		wordCounts.saveAsTextFile("OutputWordCount.txt");
